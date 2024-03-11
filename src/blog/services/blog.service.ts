@@ -25,7 +25,16 @@ export class BlogService {
         return this.blogRepository.findOneOrFail({ where: { id: id } });
     }
 
-    // async search(searchParams: SearchBlogDto): Promise<BlogPost[]> {
-        
-    // }
+    async search(searchQuery: string): Promise<BlogPost[]> {
+        const queryBuilder = this.blogRepository.createQueryBuilder('blog');
+      
+        if (searchQuery) {
+          queryBuilder.where('blog.title LIKE :search', { search: `%${searchQuery}%` })
+                      .orWhere('blog.author LIKE :search', { search: `%${searchQuery}%` })
+                      .orWhere('blog.content LIKE :search', { search: `%${searchQuery}%` });
+        }
+      
+        return queryBuilder.getMany();
+      }
+      
 }

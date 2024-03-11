@@ -7,11 +7,9 @@ import { JwtPayload } from 'jsonwebtoken';
 export class JwtAuthGuard implements CanActivate {
     constructor() { }
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        console.log('entro')
         const request = context.switchToHttp().getRequest();
         console.log(request.headers.authorization)
         const token = request.headers.authorization?.split(' ')[1];
-        console.log(token)
         if (!token) {
             throw new UnauthorizedException();
         }
